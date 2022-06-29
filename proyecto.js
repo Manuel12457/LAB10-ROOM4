@@ -53,11 +53,20 @@ app.post("/mascota/create", bodyParser.json(), (req, res) => {
             res.json({err: "ocurrió un error"});
             console.error(e);
         } else {
-            // conn.query("select * from mascota", (err, resultado) => {
-            //     if (err) throw err;
-            //     res.json(resultado);
-            // });
-            res.json({mensaje: "Se ha creado exitosamente la mascota con id: "+idmascota})
+            let parametros = [idmascota];
+            conn.query("select * from mascota where idmascota= ?",parametros, (err, resultado) => {
+                if (err){
+
+                    res.json({err: "ocurrió un error"});
+                }else{
+                    res.json({mensaje: "Se ha creado exitosamente la mascota con id: "+idmascota,
+                        mascota_creada:resultado
+                    })
+                }
+
+
+            });
+
 
         }
 
