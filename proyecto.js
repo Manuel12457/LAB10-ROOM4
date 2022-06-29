@@ -121,20 +121,19 @@ app.post('/servicio/create/:id', bodyParser.json(), function (req, res){
                 err: "Error al guardar el servicio",
                 msg: err.message
             })
+        } else{
+            conn.query("select * from servicio order by idservicio desc limit 1", function (err, results) {
+                if (err){
+                    res.status(400)
+                    res.json({
+                        err: "Error al ver el nuevo servicio",
+                        msg: err.message
+                    })
+                } else {
+                    res.json(results)
+                }
+            })
         }
-
-        conn.query("select * from servicio order by idservicio desc limit 1", function (err, results) {
-            if (err){
-                res.status(400)
-                res.json({
-                    err: "Error al ver el nuevo servicio",
-                    msg: err.message
-                })
-            }
-
-
-            res.json(results)
-        })
     })
 })
 
