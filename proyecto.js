@@ -6,8 +6,8 @@ const multer = require("multer");
 
 const params = {
     host: "localhost",
-    user: "percy",
-    password: "percy",
+    user: "root",
+    password: "root",
     database: "sandylance"
 }
 
@@ -37,12 +37,12 @@ app.get("/mascota/get/:id", function (req, res) {
     let parametros = [id];
     conn.query(sql, parametros, function (e, r) {
         if (isNaN(id)) {
-            res.json({
+            res.status(400).json({
                 error: "Debe enviar un número"
             })
         } else {
             if (r.length == 0) {
-                res.json({
+                res.status(400).json({
                     error: "Mascota no encontrada"
                 })
             } else {
@@ -143,12 +143,12 @@ app.get("/cuenta/get/:id", function (req, res) {
     let parametros = [id];
     conn.query(sql, parametros, function (e, r) {
         if (isNaN(id)) {
-            res.json({
+            res.status(400).json({
                 error: "Debe enviar un número"
             })
         } else {
             if (r.length == 0) {
-                res.json({
+                res.status(400).json({
                     error: "Cuenta no encontrada"
                 })
             } else {
