@@ -31,16 +31,23 @@ app.get("/mascota/get/", function (req, res) {
 app.get("/mascota/get/:id", function (req, res) {
 
     let id = req.params.id;
+    console.log(isNaN(id));
 
     let sql = "select * from mascota where idmascota = ?";
     let parametros = [id];
     conn.query(sql, parametros, function (e, r) {
-        if (r.length == 0) {
+        if (isNaN(id)) {
             res.json({
-                error: "Mascota no encontrada"
+                error: "Debe enviar un número"
             })
         } else {
-            res.json(r);
+            if (r.length == 0) {
+                res.json({
+                    error: "Mascota no encontrada"
+                })
+            } else {
+                res.json(r);
+            }
         }
     });
 
@@ -113,12 +120,18 @@ app.get("/cuenta/get/:id", function (req, res) {
     let sql = "select * from cuenta where idcuenta = ?";
     let parametros = [id];
     conn.query(sql, parametros, function (e, r) {
-        if (r.length == 0) {
+        if (isNaN(id)) {
             res.json({
-                error: "Cuenta no encontrada"
+                error: "Debe enviar un número"
             })
         } else {
-            res.json(r);
+            if (r.length == 0) {
+                res.json({
+                    error: "Cuenta no encontrada"
+                })
+            } else {
+                res.json(r);
+            }
         }
     });
 
