@@ -109,9 +109,24 @@ app.post('/servicio/create/:id', bodyParser.json(), function (req, res){
     let sql = "insert into servicio (mascota_idmascota, cuenta_idcuenta, hora_inicio, duracion, entrega, responsable_idresponsable) values (?,?,?,?,?,?)"
 
     conn.query(sql,parametros, function (err,result){
-        if (err) throw err
+        if (err){
+            res.status(400)
+            res.json({
+                err: "Error al guardar el servicio",
+                msg: err.message
+            })
+        }
 
-        conn.query("select * from servicio order by idservicio desc", function (err, results) {
+        conn.query("select * from servicio order by idservicio desc limit 1", function (err, results) {
+            if (err){
+                res.status(400)
+                res.json({
+                    err: "Error al ver el nuevo servicio",
+                    msg: err.message
+                })
+            }
+
+
             res.json(results)
         })
     })
