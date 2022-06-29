@@ -31,16 +31,23 @@ app.get("/mascota/get/", function (req, res) {
 app.get("/mascota/get/:id", function (req, res) {
 
     let id = req.params.id;
+    console.log(isNaN(id));
 
     let sql = "select * from mascota where idmascota = ?";
     let parametros = [id];
     conn.query(sql, parametros, function (e, r) {
-        if (r.length == 0) {
-            res.json({
-                error: "Mascota no encontrada"
+        if (isNaN(id)) {
+            res.status(400).json({
+                error: "Debe enviar un número"
             })
         } else {
-            res.json(r);
+            if (r.length == 0) {
+                res.status(400).json({
+                    error: "Mascota no encontrada"
+                })
+            } else {
+                res.json(r);
+            }
         }
     });
 
@@ -99,9 +106,37 @@ app.post("/mascota/create", bodyParser.json(), (req, res) => {
 
 });
 
-
-
 //ACTIVIDAD 3
+app.post('/servicio/create/:id', bodyParser.json(), function (req, res){
+
+    let idmascota = req.params.id
+
+    let parametros = [idmascota, req.body.cuenta_idcuenta, req.body.hora_inicio, req.body.duracion, req.body.entrega, req.body.responsable_idresponsable]
+    let sql = "insert into servicio (mascota_idmascota, cuenta_idcuenta, hora_inicio, duracion, entrega, responsable_idresponsable) values (?,?,?,?,?,?)"
+
+    conn.query(sql,parametros, function (err,result){
+        if (err){
+            res.status(400)
+            res.json({
+                err: "Error al guardar el servicio",
+                msg: err.message
+            })
+        }
+
+        conn.query("select * from servicio order by idservicio desc limit 1", function (err, results) {
+            if (err){
+                res.status(400)
+                res.json({
+                    err: "Error al ver el nuevo servicio",
+                    msg: err.message
+                })
+            }
+
+
+            res.json(results)
+        })
+    })
+})
 
 //ACTIVIDAD 4
 
@@ -121,12 +156,18 @@ app.get("/cuenta/get/:id", function (req, res) {
     let sql = "select * from cuenta where idcuenta = ?";
     let parametros = [id];
     conn.query(sql, parametros, function (e, r) {
-        if (r.length == 0) {
-            res.json({
-                error: "Cuenta no encontrada"
+        if (isNaN(id)) {
+            res.status(400).json({
+                error: "Debe enviar un número"
             })
         } else {
-            res.json(r);
+            if (r.length == 0) {
+                res.status(400).json({
+                    error: "Cuenta no encontrada"
+                })
+            } else {
+                res.json(r);
+            }
         }
     });
 
