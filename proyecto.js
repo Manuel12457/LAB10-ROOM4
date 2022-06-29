@@ -86,7 +86,7 @@ app.post("/mascota/create", bodyParser.json(), (req, res) => {
             console.error(e);
         } else {
             let parametros = [nombre];
-            conn.query("select * from mascota where nombre= ?",parametros, (err, resultado) => {
+            conn.query("select * from mascota order by idmascota desc limit 1 ",parametros, (err, resultado) => {
                 if (err){
                     res.status(400);
                     res.json({err: "ocurrió un error"});
