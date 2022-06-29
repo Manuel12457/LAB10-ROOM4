@@ -49,7 +49,6 @@ app.get("/mascota/get/:id", function (req, res) {
 //ACTIVIDAD 2
 
 app.post("/mascota/create", bodyParser.json(), (req, res) => {
-    let idmascota = req.body.idmascota;
     let nombre = req.body.nombre;
     let anho = req.body.anho;
     let historia = req.body.historia;
@@ -61,7 +60,6 @@ app.post("/mascota/create", bodyParser.json(), (req, res) => {
 
     let sql = "insert into mascota SET ?";
     let params = {
-        idmascota: idmascota,
         nombre:nombre,
         anho: anho,
         historia: historia,
@@ -76,16 +74,17 @@ app.post("/mascota/create", bodyParser.json(), (req, res) => {
         // if (e) throw e;
 
         if (e) {
+            res.status(400);
             res.json({err: "ocurrió un error"});
             console.error(e);
         } else {
-            let parametros = [idmascota];
-            conn.query("select * from mascota where idmascota= ?",parametros, (err, resultado) => {
+            let parametros = [nombre];
+            conn.query("select * from mascota where nombre= ?",parametros, (err, resultado) => {
                 if (err){
-
+                    res.status(400);
                     res.json({err: "ocurrió un error"});
                 }else{
-                    res.json({mensaje: "Se ha creado exitosamente la mascota con id: "+idmascota,
+                    res.json({mensaje: "Se ha creado exitosamente la mascota con nombre: "+nombre,
                         mascota_creada:resultado
                     })
                 }
