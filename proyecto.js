@@ -46,7 +46,22 @@ app.post("/mascota/create", bodyParser.json(), (req, res) => {
         cuenta_idcuenta: cuenta_idcuenta
     };
 
+    conn.query(sql, params, (e) => {
+        // if (e) throw e;
 
+        if (e) {
+            res.json({err: "ocurrió un error"});
+            console.error(e);
+        } else {
+            // conn.query("select * from mascota", (err, resultado) => {
+            //     if (err) throw err;
+            //     res.json(resultado);
+            // });
+            res.json({mensaje: "Se ha creado exitosamente la mascota con id: "+idmascota})
+
+        }
+
+    });
 
 });
 
